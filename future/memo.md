@@ -55,3 +55,15 @@ int main()
   return 0;
 }
 ```
+
+## [std::future::wait_for](https://cpprefjp.github.io/reference/future/future/wait_for.html)
+
+相対時間でタイムアウトを指定して、処理が完了するまで待機する  
+共有状態が**遅延状態(future_status::deferred)の場合、この関数は何もしない**。そうでない場合、rel_timeで指定された相対時間の期限まで、共有状態が準備状態(future_status::ready)になるのを待機する。
+
+戻り値  
+* future_status::deferred ： 共有状態が遅延関数を持っている
+* future_status::ready ： 共有状態が準備完了になった
+* future_status::timeout ： rel_timeで指定された相対時間内に準備完了にならず、タイムアウトになった
+
+サンプルはfutureWaitFor.cppを参照
