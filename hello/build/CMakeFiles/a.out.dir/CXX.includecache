@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/centuser/cpp/hello/hello.cpp
+iostream
+-
+hello.hpp
+/home/centuser/cpp/hello/hello.hpp
+
+/home/centuser/cpp/hello/hello.hpp
+
+/home/centuser/cpp/hello/main.cpp
+hello.hpp
+/home/centuser/cpp/hello/hello.hpp
+

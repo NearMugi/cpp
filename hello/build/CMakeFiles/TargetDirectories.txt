@@ -1,0 +1,3 @@
+/home/centuser/cpp/hello/build/CMakeFiles/rebuild_cache.dir
+/home/centuser/cpp/hello/build/CMakeFiles/edit_cache.dir
+/home/centuser/cpp/hello/build/CMakeFiles/a.out.dir
