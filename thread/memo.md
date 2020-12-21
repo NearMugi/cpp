@@ -141,3 +141,65 @@ cond_.wait(lk, [this] { return is_ready; });
 > なのでこの場合、準備が確実に終了した事を通知する必要がある。  
 > そのために用いているのがis_readyである  
 
+## スレッドの優先度設定
+
+[C++ std::threadの使い方](https://qiita.com/kurun_pan/items/f626e763e74e82a44493)を参照  
+
+>std::threadではスレッドに対する詳細設定が出来ませんので、native_handle()でプラットフォーム固有のスレッドハンドラを取得し、そのプラットフォームに合わせた形で設定する必要があります。ここではUnix系 (Linux, macOS) の例を以下に示します。
+
+``` cpp
+int main() {
+  auto func = [](std::string message) {
+    std::cout << "thread id = " << std::this_thread::get_id() << " " << message << std::endl;
+  };
+  std::thread th2(func, "Hellow, World!");
+
+  // 優先度を設定
+  struct sched_param param;
+  param.sched_priority = 0;
+  if (pthread_setschedparam(th2.native_handle(), SCHED_OTHER, &param) != 0)
+    std::cout << "Priority set Error" << std::endl;
+
+  th2.join();
+
+  return 0;
+}
+```
+
+## join or detach を確実に処理させる
+
+EffectiveModernC++の項目37「std::threadはすべての場面でjoin不可にする」に記載されている。  
+また[C++11で始めるマルチスレッドプログラミングその1 ～std::thread事始め～](https://suikaba.hatenablog.com/entry/2014/08/19/225703)も参照  
+
+>RAIIを用いてjoin()、detach()の呼び出し忘れを防ぐ  
+>先に述べたとおり、threadは必ずjoin()またはdetach()が呼び出されなければなりません。しかし直にjoin()やdetach()を呼び出すコードは、例外機構との相性が悪いです。例えば、以下のコードではjoinが呼び出されない可能性があります。
+
+``` cpp
+std::thread t([] { /*...*/ });
+some_process(); // 例外が投げられうる
+t.join();       // some_processで例外が投げられると呼び出されない
+```
+
+>これを防ぐために、RAIIを用いてjoin()やdetach()を呼び出す仕組みがあります。以下のthread_guardがその一例です*1が、他にもBoostのscoped_guardなどがあるので、調べてみてください。
+
+つまりデストラクタで確実に処理する
+``` cpp
+class thread_guard {
+    std::thread& t;
+public:
+    explicit thread_guard(std::thread& t_) : t(t_) {}
+    ~thread_guard() {
+        if(t.joinable()) {
+            t.join();
+        }
+    }
+    thread_guard(thread_guard const&) = delete;
+    thread_guard& operator=(thread_guard const&) = delete;
+};
+
+int main() {
+    std::thread t1([]{ /* ... */ });
+    thread_guard tg(t1);
+    some_process();
+} // 例外が投げられてもjoinが呼ばれる
+```
