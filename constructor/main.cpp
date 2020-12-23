@@ -22,7 +22,8 @@ public:
 
   // Copy Assignment Operator
   nameObject& operator=(const nameObject& rhs){
-   std::cout << "Copy Assignment Operator" << std::endl; 
+   std::cout << "Copy Assignment Operator" << std::endl;
+   return *this; 
   };
 
   nameObject(const char* name, const T& value)
@@ -47,10 +48,23 @@ private:
 
 
 int main(){
+  // コンストラクタ
   nameObject<int> no1("hogehoge", 2);
+
+  // コピーコンストラクタ
   nameObject<int> no2(no1);
   nameObject<int> no3 = no1;
+
+  // デフォルトコンストラクタ
+  nameObject<int> no4;
+
+  // コピー演算子
+  no4 = no3;
+
   no1.printValue();
   no2.printValue();
   no3.printValue();
+  no4.printValue();
+
+  std::cout << "main end" << std::endl;
 };
