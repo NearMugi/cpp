@@ -30,6 +30,11 @@ class squareMatrix : private squareMatrixBase<T>
 int main()
 {
   squareMatrix<double, 10> s1;
+  squareMatrix<double, 50> s2;
+   
   s1.invert();
+  s2.invert();
+  s1.invert();
+ 
   return 0;
 };
