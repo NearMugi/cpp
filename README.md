@@ -19,6 +19,9 @@ osdn.net/projects/mingw/ にアクセスしてから、「Windows mingw-get-setu
 https://code.visualstudio.com/docs/languages/cpp  
 https://www.msys2.org/  
 https://blog.websandbag.com/entry/2022/10/01/033811
+```
+pacman -S --needed base-devel mingw-w64-x86_64-toolchain
+```
 9. MinGW がそろっているか確認
 ```
 gcc --version
@@ -30,7 +33,10 @@ gdb --version
 Code Runner を使ってコードを実行
 ```
 Ctrl+Alt+N
+# ※EverNoteが起動してしまうので、閉じておく。
 ```
+もしくはF1 で Run Code を実行
+
 実行中のコードを停止するには
 ```
 Ctrl+Alt+M
