@@ -3,41 +3,90 @@ cppの知識
 
 ## Setting
 
-VScodeでC++をコンパイルできるようにする
-(参考URL)
-https://www.freecodecamp.org/japanese/news/how-to-compile-your-c-code-in-visual-studio-code/
+DockerでC++をビルドできる環境を用意する。  
 
-1. C++ のコンパイラのダウンロードとインストール
-osdn.net/projects/mingw/ にアクセスしてから、「Windows mingw-get-setup.exe」をクリックして MinGW のセットアップファイルをダウンロードしてください。
-2. ダウンロードが終わったら、MinGW のインストールを開始して、「MinGW Installation Manager」が表示されるのを待ちます。
-3. 「MinGW Installation Manager」が表示されたら、mingw32-gcc-g++ のチェックボックスをクリックしてから、「Mark for Installation」を選んでください。
-4. 上部の左端にあるメニューの中の、「Installation > Apply Changes」をクリックしてください。
-5. 変更の適用が完了するのを待ちましょう。この処理は必ずインターネット接続が安定している状態で実行してください。
-6. C:\MinGW\bin をパスを通す
-7. Code Runner 拡張機能を VS Code にインストール
-8. gdb をインストール  
-https://code.visualstudio.com/docs/languages/cpp  
-https://www.msys2.org/  
-https://blog.websandbag.com/entry/2022/10/01/033811
-```
-pacman -S --needed base-devel mingw-w64-x86_64-toolchain
-```
-9. MinGW がそろっているか確認
-```
-gcc --version
-g++ --version
-gdb --version
+サンプルDockerfile
+
+``` docker
+# Build
+FROM ubuntu:latest AS dev
+ARG FILE_NAME
+
+RUN apt update && apt install -y g++ gcc
+
+COPY ${FILE_NAME} /app/
+WORKDIR /app
+RUN g++ ${FILE_NAME} -o a
+
+# Run
+FROM ubuntu:latest AS prod
+WORKDIR /app
+COPY --from=dev /app/a /app/a 
+# Install required packages if you need
+#RUN apk add --quiet --no-cache \
+#  hoge 
+
+CMD ["./a"]
 ```
 
-## Compile & Run
-Code Runner を使ってコードを実行
-```
-Ctrl+Alt+N
-# ※EverNoteが起動してしまうので、閉じておく。
-```
-もしくはF1 で Run Code を実行
+build & Run & delete container
 
-実行中のコードを停止するには
+``` bash
+cd helloWorld
+docker build -t cpp-env:1.0 --build-arg FILE_NAME=helloWorld.cpp .
+docker run  --name helloworld -it cpp-env:1.0
+docker rm -f helloworld
 ```
-Ctrl+Alt+M
+
+実行ログ
+
+``` sh
+niamu@home-workspace MINGW64 ~/_work
+$ cd cpp/helloWorld/
+
+niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
+$ docker build -t cpp-env:1.0 --build-arg FILE_NAME=helloWorld.cpp .
+[+] Building 131.4s (13/13) FINISHED                                                                                                                                                         docker:default 
+ => [internal] load .dockerignore                                                                                                                                                                      0.0s 
+ => => transferring context: 2B                                                                                                                                                                        0.0s 
+ => [internal] load build definition from Dockerfile                                                                                                                                                   0.0s 
+ => => transferring dockerfile: 384B                                                                                                                                                                   0.0s 
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                                                                                       1.4s
+ => [auth] library/ubuntu:pull token for registry-1.docker.io                                                                                                                                          0.0s
+ => [internal] load build context                                                                                                                                                                      0.0s
+ => => transferring context: 35B                                                                                                                                                                       0.0s
+ => CACHED [dev 1/5] FROM docker.io/library/ubuntu:latest@sha256:6042500cf4b44023ea1894effe7890666b0c5c7871ed83a97c36c76ae560bb9b                                                                      0.0s
+ => [dev 2/5] RUN apt update && apt install -y g++ gcc                                                                                                                                               128.9s
+ => [dev 3/5] COPY helloWorld.cpp /app/                                                                                                                                                                0.0s
+ => [dev 4/5] WORKDIR /app                                                                                                                                                                             0.0s
+ => [dev 5/5] RUN g++ helloWorld.cpp -o a                                                                                                                                                              0.9s
+ => CACHED [prod 2/3] WORKDIR /app                                                                                                                                                                     0.0s
+ => CACHED [prod 3/3] COPY --from=dev /app/a /app/a                                                                                                                                                    0.0s
+ => exporting to image                                                                                                                                                                                 0.0s
+ => => exporting layers                                                                                                                                                                                0.0s
+ => => writing image sha256:06bf04fa2397daca13ec68499f04b198ff9010df04ca62f43cb6697578f44429                                                                                                           0.0s
+ => => naming to docker.io/library/cpp-env:1.0                                                                                                                                                         0.0s 
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview
+  
+niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
+$ docker run  --name helloworld -it cpp-env:1.0 
+Hello world !!!
+niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
+$ docker ps -a
+CONTAINER ID   IMAGE         COMMAND   CREATED          STATUS                      PORTS     NAMES
+642f57f155d9   cpp-env:1.0   "./a"     31 seconds ago   Exited (0) 30 seconds ago             helloworld
+
+niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
+$ docker rm -f helloworld
+helloworld
+
+niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
+$ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+cpp-env      1.0       06bf04fa2397   13 minutes ago   77.9MB
+
+niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
+$
 ```
