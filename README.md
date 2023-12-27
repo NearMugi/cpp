@@ -4,6 +4,20 @@ cppの知識
 ## Setting
 
 DockerでC++をビルドできる環境を用意する。  
+スクリプトを実行することでBuild＆Runが出来る。
+
+```bash
+bash run.sh
+```
+
+|ファイル|概要|
+|-|-|
+|.env|TARGET_FOLDER : ビルド対象のフォルダを指定 </br> TARGET_FILE : ビルド対象のファイルを指定|
+|Dockerfile|ビルド対象のファイルをコピーしてコンパイル、実行を行う|
+|run.sh|Build&Runを実行する|
+
+
+## 参考
 
 サンプルDockerfile
 
@@ -71,16 +85,16 @@ What's Next?
   View a summary of image vulnerabilities and recommendations → docker scout quickview
   
 niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
-$ docker run  --name helloworld -it cpp-env:1.0 
+$ docker run  --name cpp -it cpp-env:1.0 
 Hello world !!!
 niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
 $ docker ps -a
 CONTAINER ID   IMAGE         COMMAND   CREATED          STATUS                      PORTS     NAMES
-642f57f155d9   cpp-env:1.0   "./a"     31 seconds ago   Exited (0) 30 seconds ago             helloworld
+642f57f155d9   cpp-env:1.0   "./a"     31 seconds ago   Exited (0) 30 seconds ago             cpp
 
 niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
-$ docker rm -f helloworld
-helloworld
+$ docker rm -f cpp
+cpp
 
 niamu@home-workspace MINGW64 ~/_work/cpp/helloWorld (create-docker-env)
 $ docker images

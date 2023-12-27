@@ -1,12 +1,13 @@
 # Build
 FROM ubuntu:latest AS dev
-ARG FILE_NAME
+ARG TARGET_FOLDER
+ARG TARGET_FILE
 
 RUN apt update && apt install -y g++ gcc
 
-COPY ${FILE_NAME} /app/
+COPY ${TARGET_FOLDER}/${TARGET_FILE} /app/
 WORKDIR /app
-RUN g++ ${FILE_NAME} -o a
+RUN g++ ${TARGET_FILE} -o a
 
 # Run
 FROM ubuntu:latest AS prod
