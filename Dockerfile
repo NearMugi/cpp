@@ -7,7 +7,7 @@ RUN apt update && apt install -y g++-11 gcc-11
 
 COPY ${TARGET_FOLDER}/${TARGET_FILE} /app/
 WORKDIR /app
-RUN g++-11 ${TARGET_FILE} -o a -std=c++20
+RUN g++-11 ${TARGET_FILE} -o a -std=c++20 -O3
 
 # Run
 FROM ubuntu:latest AS prod
