@@ -12,7 +12,6 @@ docker build -t cpp-env:1.0 \
 --build-arg TARGET_FILE=${TARGET_FILE} . \
 > build.log 2>&1
 
- 
 if grep -q "ERROR" build.log; then
   echo "build Error..."
   cat build.log | tail -n 20
@@ -21,6 +20,9 @@ else
   echo "OK"
 fi
 
+# delete prev image
+docker image prune -f --filter "dangling=true" &> /dev/null
+ 
 echo "-----------------------------"
 echo " RUN "
 echo "-----------------------------"
