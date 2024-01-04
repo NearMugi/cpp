@@ -24,14 +24,14 @@ public:
     std::vector<int> element_22;
   };
 
-  template <typename T1, typename T2>
+  template <typename T1 = std::string, typename T2>
   void print(T1 msg, T2 value) {
     std::ostringstream ss;
     ss << msg << " : " << value;
     std::cout << ss.str() << std::endl;
   };
 
-  template <typename T1, typename T2>
+  template <typename T1 = std::string, typename T2>
   void print(T1 msg, std::vector<T2> value) {
     std::ostringstream ss_v;
     std::for_each(value.begin(), value.end(), [&ss_v](T2 v){ss_v << v << ",";});
@@ -44,7 +44,7 @@ public:
     std::cout << ss.str() << std::endl;
   };
 
-  template <typename T1, typename T2 = Structure_01>
+  template <typename T1 = std::string, typename T2 = Structure_01>
   void print(T1 msg, Structure_01 value) {
     std::ostringstream ss_v;
     ss_v << "{"
@@ -58,7 +58,7 @@ public:
     std::cout << ss.str() << std::endl;
   };
 
-  template <typename T1, typename T2 = Structure_02>
+  template <typename T1 = std::string, typename T2 = Structure_02>
   void print(T1 msg, Structure_02 value) {
 
     std::ostringstream ss_v2;
