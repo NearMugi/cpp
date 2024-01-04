@@ -80,4 +80,4 @@ public:
   };
 };
 
-#endif
+#endif //__ABSTRACTION_OF_TYPES_H__
