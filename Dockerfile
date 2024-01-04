@@ -5,7 +5,7 @@ ARG TARGET_FILE
 
 RUN apt update && apt install -y g++-11 gcc-11
 
-COPY ${TARGET_FOLDER}/${TARGET_FILE} /app/
+COPY ${TARGET_FOLDER} /app/
 WORKDIR /app
 RUN g++-11 ${TARGET_FILE} -o a -std=c++20 -O3
 
