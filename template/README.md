@@ -22,5 +22,3 @@ std::is_integral_v<T>やstd::is_same_v<T, std::string> で型を判定してい�
 インスタンスを生成する際に、クラスの持つメモリ変数の型を指定できる。  
 用途が思いつかない。
 
-## テンプレートクラスのインスタンス化(Instantiation of template classes)
-
