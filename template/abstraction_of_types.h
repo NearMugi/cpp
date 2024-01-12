@@ -37,7 +37,7 @@ public:
     std::for_each(value.begin(), value.end(), [&ss_v](T2 v){ss_v << v << ",";});
     
     std::ostringstream ss_vector;
-    ss_vector << "[" << ss_v.str().erase(ss_v.str().size() - 1) << "]";
+    ss_vector << "{" << ss_v.str().erase(ss_v.str().size() - 1) << "}";
     
     std::ostringstream ss;
     ss << msg << ss_vector.str();
@@ -65,7 +65,7 @@ public:
     std::for_each(value.element_22.begin(), value.element_22.end(), [&ss_v2](auto v){ss_v2 << v << ",";});
 
     std::ostringstream ss_vector;
-    ss_vector << "[" << ss_v2.str().erase(ss_v2.str().size() - 1) << "]";
+    ss_vector << "{" << ss_v2.str().erase(ss_v2.str().size() - 1) << "}";
 
     std::ostringstream ss_v;
     ss_v << "{"
